@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useVideo } from "@/contexts/VideoContext";
 import formatTime from "@/helpers/formatTime";
+import { useZoomBlock, ZoomBlock } from "@/contexts/ZoomBlockContext";
 
 export default function Player() {
   const {
@@ -16,6 +17,8 @@ export default function Player() {
     updateCurrentTime,
   } = useVideo();
 
+  const { addZoomBlock } = useZoomBlock();
+
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const progressBar = e.currentTarget;
     const rect = progressBar.getBoundingClientRect();
@@ -28,9 +31,32 @@ export default function Player() {
     updateCurrentTime(newTime);
   };
 
+  const handleBlockCreation = (e: React.MouseEvent<HTMLVideoElement>) => {
+    const video = e.currentTarget;
+    const rect = video.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    const newZoomBlock: ZoomBlock = {
+      startTime: currentTime,
+      endTime: currentTime + 300,
+      coordinates: {
+        x: clickX,
+        y: clickY,
+      },
+      zoomFactor: 1,
+    };
+
+    addZoomBlock(newZoomBlock);
+  };
+
   return (
     <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200">
-      <video ref={videoRef} className="border-t rounded-t-lg cursor-crosshair">
+      <video
+        ref={videoRef}
+        className="border-t rounded-t-lg cursor-crosshair"
+        onClick={handleBlockCreation}
+      >
         Your browser does not support the video tag.
       </video>
       <div className="p-2 flex w-full items-center gap-4">

@@ -4,25 +4,18 @@ import { createContext, useContext, useState } from "react";
 
 type StartTime = number;
 type EndTime = number;
-type StartPositionX = number;
-type StartPositionY = number;
-type EndPositionX = number;
-type EndPositionY = number;
-type BlockStartCoordinates = {
-  x: StartPositionX;
-  y: StartPositionY;
-};
-type BlockEndCoordinates = {
-  x: EndPositionX;
-  y: EndPositionY;
+type PositionX = number;
+type PositionY = number;
+type Coordinates = {
+  x: PositionX;
+  y: PositionY;
 };
 type ZoomFactor = number;
 
-type ZoomBlock = {
+export type ZoomBlock = {
   startTime: StartTime;
   endTime: EndTime;
-  blockStartCoordinates: BlockStartCoordinates;
-  blockEndCoordinates: BlockEndCoordinates;
+  coordinates: Coordinates;
   zoomFactor: ZoomFactor;
 };
 
@@ -34,6 +27,7 @@ interface ZoomBlockContextProps {
   zoomBlocks: ZoomBlock[];
   addZoomBlock: (zoomBlock: ZoomBlock) => void;
   removeZoomBlock: (zoomBlock: ZoomBlock) => void;
+  selectZoomBlock: (zoomBlock: ZoomBlock) => void;
 }
 
 const ZoomBlockContext = createContext<ZoomBlockContextProps | undefined>(
@@ -56,9 +50,19 @@ export const ZoomBlockProvider = ({
     setZoomBlocks((prev) => prev.filter((block) => block !== zoomBlock));
   };
 
+  const selectZoomBlock = (zoomBlock: ZoomBlock) => {
+    setSelectedZoomBlock(zoomBlock);
+  };
+
   return (
     <ZoomBlockContext.Provider
-      value={{ selectedZoomBlock, zoomBlocks, addZoomBlock, removeZoomBlock }}
+      value={{
+        selectedZoomBlock,
+        zoomBlocks,
+        addZoomBlock,
+        removeZoomBlock,
+        selectZoomBlock,
+      }}
     >
       {children}
     </ZoomBlockContext.Provider>
