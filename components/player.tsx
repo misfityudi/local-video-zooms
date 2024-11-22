@@ -17,22 +17,19 @@ export default function Player() {
   } = useVideo();
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const progressBar = e.currentTarget; // The progress bar container
-    const rect = progressBar.getBoundingClientRect(); // Get the size and position of the progress bar
-    const clickX = e.clientX - rect.left; // Mouse click position relative to the progress bar
-    const width = rect.width; // Total width of the progress bar
-    const clickPercentage = clickX / width; // Percentage of the bar where the click occurred
-
-    console.log("clickPercentage", clickPercentage);
+    const progressBar = e.currentTarget;
+    const rect = progressBar.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const width = rect.width;
+    const clickPercentage = clickX / width;
 
     const newTime = (clickPercentage * duration) / 1000;
-    console.log("newTime", newTime);
 
     updateCurrentTime(newTime);
   };
 
   return (
-    <div className="player flex flex-col self-center my-auto border rounded-lg border-gray-200">
+    <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200">
       <video ref={videoRef} className="border-t rounded-t-lg cursor-crosshair">
         Your browser does not support the video tag.
       </video>

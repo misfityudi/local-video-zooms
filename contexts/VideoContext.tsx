@@ -38,26 +38,22 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentTime, setCurrentTime] = useState<CurrentTime>(0);
   const [duration, setDuration] = useState<Duration>(0);
 
-  // Update duration when metadata is loaded
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Event handler for metadata loading
     const handleMetadataLoaded = () => {
       setVideoHeight(video.height);
       setVideoWidth(video.width);
       setCurrentTime(0);
-      setDuration(video.duration * 1000); // Set duration when metadata is loaded
+      setDuration(video.duration * 1000);
     };
 
-    // Update video source and force reload
     video.src = videoSrc;
-    video.load(); // Ensure the new source is loaded
+    video.load();
     video.addEventListener("loadedmetadata", handleMetadataLoaded);
 
     return () => {
-      // Clean up event listener and URL
       video.removeEventListener("loadedmetadata", handleMetadataLoaded);
       if (videoSrc) {
         URL.revokeObjectURL(videoSrc);
@@ -65,27 +61,24 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [videoSrc]);
 
-  // Update currentTime at regular intervals while the video is playing
   useEffect(() => {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
 
-    // Create an interval when the video is playing
     const updateTime = () => {
-      setCurrentTime(video.currentTime * 1000); // Convert seconds to milliseconds
+      setCurrentTime(video.currentTime * 1000);
     };
 
     if (!video.paused) {
       const interval = setInterval(updateTime, 100);
 
       return () => {
-        clearInterval(interval); // Clear interval on cleanup
+        clearInterval(interval);
       };
     }
-  }, [videoRef.current?.paused]); // Dependency on videoRef.current?.paused
+  }, [videoRef.current?.paused]);
 
-  // Handle video end event
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -93,16 +86,14 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
     const handleVideoEnd = () => {
       video.muted = false;
       video.volume = 0.5;
-      setCurrentTime(video.duration * 1000); // Convert to milliseconds
+      setCurrentTime(video.duration * 1000);
       setIsMuted(false);
       setPlaybackOn(false);
     };
 
-    // Add event listener for video end
     video.addEventListener("ended", handleVideoEnd);
 
     return () => {
-      // Cleanup event listener
       video.removeEventListener("ended", handleVideoEnd);
     };
   }, [videoRef.current]);
@@ -110,13 +101,13 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
   const handleMuteUnmute = () => {
     if (videoRef.current) {
       if (videoRef.current.muted) {
-        videoRef.current.muted = false; // Unmute
-        videoRef.current.volume = 0.5; // Set volume to 50% (0.0 to 1.0)
-        setIsMuted(false); // Update state
+        videoRef.current.muted = false;
+        videoRef.current.volume = 0.5;
+        setIsMuted(false);
       } else {
-        videoRef.current.muted = true; // Mute
-        videoRef.current.volume = 0; // Set volume to 0 (muted)
-        setIsMuted(true); // Update state
+        videoRef.current.muted = true;
+        videoRef.current.volume = 0;
+        setIsMuted(true);
       }
     }
   };
