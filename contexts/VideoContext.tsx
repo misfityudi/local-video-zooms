@@ -7,11 +7,15 @@ type VideoSrc = string;
 type Height = number;
 type Width = number;
 type Duration = number;
+type CurrentTime = number;
 type IsPlaybackOn = boolean;
 
 interface VideoContextProps {
+  currentTime: CurrentTime;
+  isPlaybackOn: IsPlaybackOn;
   videoRef: VideoRef;
   videoSrc: VideoSrc;
+  handlePlayPause: () => void;
   uploadVideo: (videoURL: string) => void;
 }
 
@@ -20,6 +24,8 @@ const VideoContext = createContext<VideoContextProps | undefined>(undefined);
 export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoSrc, setVideoSrc] = useState<VideoSrc>("/video.mp4");
+  const [isPlaybackOn, setPlaybackOn] = useState<IsPlaybackOn>(false);
+  const [currentTime, setCurrentTime] = useState<CurrentTime>(0);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -34,13 +40,37 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [videoSrc]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {}, 200);
+  }, []);
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+        setPlaybackOn(() => true);
+      } else {
+        videoRef.current.pause();
+        setPlaybackOn(() => false);
+      }
+    }
+  };
+
   const uploadVideo = (videoURL: string) => {
-    console.log("videoUrl", videoURL);
     setVideoSrc(() => videoURL);
   };
 
   return (
-    <VideoContext.Provider value={{ videoRef, videoSrc, uploadVideo }}>
+    <VideoContext.Provider
+      value={{
+        currentTime,
+        isPlaybackOn,
+        videoRef,
+        videoSrc,
+        handlePlayPause,
+        uploadVideo,
+      }}
+    >
       {children}
     </VideoContext.Provider>
   );

@@ -23,7 +23,6 @@ body {
 .player {
   width: 60%;
   /* transition: transform 0.3s ease; */
-  cursor: grab;
 }
 
 .player:hover {

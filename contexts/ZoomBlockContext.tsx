@@ -4,18 +4,25 @@ import { createContext, useContext, useState } from "react";
 
 type StartTime = number;
 type EndTime = number;
-type XPosition = number;
-type YPosition = number;
-type Coordinates = {
-  x: XPosition;
-  y: YPosition;
+type StartPositionX = number;
+type StartPositionY = number;
+type EndPositionX = number;
+type EndPositionY = number;
+type BlockStartCoordinates = {
+  x: StartPositionX;
+  y: StartPositionY;
+};
+type BlockEndCoordinates = {
+  x: EndPositionX;
+  y: EndPositionY;
 };
 type ZoomFactor = number;
 
 type ZoomBlock = {
   startTime: StartTime;
   endTime: EndTime;
-  coordinates: Coordinates;
+  blockStartCoordinates: BlockStartCoordinates;
+  blockEndCoordinates: BlockEndCoordinates;
   zoomFactor: ZoomFactor;
 };
 
