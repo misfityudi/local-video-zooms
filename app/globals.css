@@ -19,3 +19,13 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.player {
+  width: 60%;
+  /* transition: transform 0.3s ease; */
+  cursor: grab;
+}
+
+.player:hover {
+  /* transform: scale(1.1); */
+}
