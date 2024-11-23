@@ -34,8 +34,7 @@ export default function Player() {
       );
 
       if (activeZoomBlock) {
-        const { x, y } = activeZoomBlock.coordinates;
-        const zoomFactor = activeZoomBlock.zoomFactor;
+        const { x, y, zoomFactor } = activeZoomBlock;
 
         const scaledWidth = rect.width * zoomFactor;
         const scaledHeight = rect.height * zoomFactor;
@@ -70,7 +69,7 @@ export default function Player() {
     const interval = setInterval(applyZoom, 100);
 
     return () => clearInterval(interval);
-  }, [zoomBlocks]);
+  }, [zoomBlocks, videoRef]);
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const progressBar = e.currentTarget;
@@ -94,10 +93,8 @@ export default function Player() {
       blockId: zoomBlocks.length,
       startTime: currentTime,
       endTime: currentTime + 1000,
-      coordinates: {
-        x: clickX,
-        y: clickY,
-      },
+      x: clickX,
+      y: clickY,
       zoomFactor: 1.2,
     };
 

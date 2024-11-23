@@ -7,17 +7,14 @@ type StartTime = number;
 type EndTime = number;
 type XPosition = number;
 type YPosition = number;
-type Coordinates = {
-  x: XPosition;
-  y: YPosition;
-};
 type ZoomFactor = number;
 
 export type ZoomBlock = {
   blockId: BlockId;
   startTime: StartTime;
   endTime: EndTime;
-  coordinates: Coordinates;
+  x: XPosition;
+  y: YPosition;
   zoomFactor: ZoomFactor;
 };
 

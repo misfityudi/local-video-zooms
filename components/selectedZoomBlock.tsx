@@ -12,7 +12,7 @@ export default function SelectedZoomBlock() {
 
   if (!selectedZoomBlock || !zoomBlocks.length) return;
 
-  const handleChange = (field: keyof typeof selectedZoomBlock, value: any) => {
+  const handleChange = (field: string, value: number) => {
     if (field === "startTime") {
       updateZoomBlock({ [field]: value, endTime: value + 1000 });
     }
@@ -55,34 +55,28 @@ export default function SelectedZoomBlock() {
 
       <div>
         <label htmlFor="x-coordinate">
-          X Coordinate: {selectedZoomBlock.coordinates.x.toFixed(2)}
+          X Coordinate: {selectedZoomBlock.x.toFixed(2)}
           <input
             type="number"
             id="x-coordinate"
             className="mt-1"
             step="0.01"
-            value={selectedZoomBlock.coordinates.x.toFixed(2)}
+            value={selectedZoomBlock.x.toFixed(2)}
             onChange={(e) =>
-              handleChange("coordinates", {
-                ...selectedZoomBlock.coordinates,
-                x: parseFloat(e.target.value || "0.9"),
-              })
+              handleChange("x", parseFloat(e.target.value || "0.9"))
             }
           />
         </label>
         <label htmlFor="y-coordinate">
-          Y Coordinate: {selectedZoomBlock.coordinates.y.toFixed(2)}
+          Y Coordinate: {selectedZoomBlock.y.toFixed(2)}
           <input
             type="number"
             id="y-coordinate"
             className="mt-1"
             step="0.01"
-            value={selectedZoomBlock.coordinates.y.toFixed(2)}
+            value={selectedZoomBlock.y.toFixed(2)}
             onChange={(e) =>
-              handleChange("coordinates", {
-                ...selectedZoomBlock.coordinates,
-                y: parseFloat(e.target.value || "0.9"),
-              })
+              handleChange("y", parseFloat(e.target.value || "0.9"))
             }
           />
         </label>
