@@ -26,6 +26,7 @@ export default function Player() {
 
     const applyZoom = () => {
       const currentTime = video.currentTime * 1000;
+      const rect = video.getBoundingClientRect(); // Get the dimensions of the video player
 
       // Find the active zoom block
       const activeZoomBlock = zoomBlocks.find(
@@ -33,11 +34,43 @@ export default function Player() {
           currentTime >= zoomBlock.startTime && currentTime <= zoomBlock.endTime
       );
 
-      console.log("activeZoomBlock", activeZoomBlock);
-
       if (activeZoomBlock) {
-        // Apply zoom based on the active zoom block
-        video.style.transform = `scale(${activeZoomBlock.zoomFactor}) translate(${activeZoomBlock.coordinates.x}px, ${activeZoomBlock.coordinates.y}px)`;
+        const { x, y } = activeZoomBlock.coordinates;
+        const zoomFactor = activeZoomBlock.zoomFactor;
+
+        // Calculate the scaled size of the video
+        const scaledWidth = rect.width * zoomFactor;
+        const scaledHeight = rect.height * zoomFactor;
+
+        // Calculate the position of the coordinates relative to the center of the video player
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const offsetX = x - centerX; // X offset from the center
+        const offsetY = y - centerY; // Y offset from the center
+
+        // Directional panning logic
+        let panX = 0;
+        let panY = 0;
+
+        if (offsetX < 0) {
+          // Left side, pan to the right
+          panX = Math.min(0, -(scaledWidth - rect.width) / 2 - offsetX);
+        } else {
+          // Right side, pan to the left
+          panX = Math.max(0, (scaledWidth - rect.width) / 2 - offsetX);
+        }
+
+        if (offsetY < 0) {
+          // Top side, pan down
+          panY = Math.min(0, -(scaledHeight - rect.height) / 2 - offsetY);
+        } else {
+          // Bottom side, pan up
+          panY = Math.max(0, (scaledHeight - rect.height) / 2 - offsetY);
+        }
+
+        // Apply the zoom and pan, ensuring clipping of overflow
+        video.style.transform = `scale(${zoomFactor}) translate(${panX}px, ${panY}px)`;
       } else {
         // Reset to default zoom if no active zoom block
         video.style.transform = "scale(1) translate(0, 0)";
@@ -85,15 +118,15 @@ export default function Player() {
   };
 
   return (
-    <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200">
+    <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200 relative overflow-hidden">
       <video
         ref={videoRef}
-        className="player border-t rounded-t-lg cursor-zoom-in overflow-hidden"
+        className="player border-t rounded-t-lg cursor-zoom-in"
         onClick={handleBlockCreation}
       >
         Your browser does not support the video tag.
       </video>
-      <div className="p-2 flex w-full items-center gap-4">
+      <div className="p-2 flex w-full items-center gap-4 z-10 bg-black">
         {isPlaybackOn ? (
           <Image
             src="/icons/pause.png"
