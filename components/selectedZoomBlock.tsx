@@ -6,13 +6,13 @@ import formatTime from "@/helpers/formatTime";
 
 export default function SelectedZoomBlock() {
   const { duration } = useVideo();
-  const { selectedZoomBlock, updateZoomBlock } = useZoomBlock();
+  const { zoomBlocks, selectedZoomBlock, updateZoomBlock } = useZoomBlock();
 
-  if (!selectedZoomBlock) return;
+  if (!selectedZoomBlock || !zoomBlocks.length) return;
 
   const handleChange = (field: keyof typeof selectedZoomBlock, value: any) => {
     if (field === "startTime") {
-      updateZoomBlock({ [field]: value, endTime: value + 300 });
+      updateZoomBlock({ [field]: value, endTime: value + 1000 });
     }
     updateZoomBlock({ [field]: value });
   };
@@ -41,7 +41,7 @@ export default function SelectedZoomBlock() {
         <input
           type="range"
           id="end-time"
-          min={selectedZoomBlock.startTime + 300}
+          min={selectedZoomBlock.startTime + 1000}
           max={duration}
           step="100"
           value={selectedZoomBlock.endTime}

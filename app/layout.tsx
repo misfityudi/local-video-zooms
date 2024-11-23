@@ -30,9 +30,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <VideoProvider>
-          <ZoomBlockProvider>{children}</ZoomBlockProvider>
-        </VideoProvider>
+        <ZoomBlockProvider>
+          <VideoProvider>{children}</VideoProvider>
+        </ZoomBlockProvider>
       </body>
     </html>
   );

@@ -161,7 +161,7 @@ export const VideoProvider = ({ children }: { children: React.ReactNode }) => {
 export const useVideo = () => {
   const context = useContext(VideoContext);
   if (!context) {
-    throw new Error("useTheme must be used within a VideoProvider");
+    throw new Error("useVideo must be used within a VideoProvider");
   }
   return context;
 };

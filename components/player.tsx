@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { useVideo } from "@/contexts/VideoContext";
-import formatTime from "@/helpers/formatTime";
 import { useZoomBlock, ZoomBlock } from "@/contexts/ZoomBlockContext";
+import formatTime from "@/helpers/formatTime";
 
 export default function Player() {
   const {
@@ -39,7 +40,7 @@ export default function Player() {
 
     const newZoomBlock: ZoomBlock = {
       startTime: currentTime,
-      endTime: currentTime + 300,
+      endTime: currentTime + 1000,
       coordinates: {
         x: clickX,
         y: clickY,
@@ -47,8 +48,10 @@ export default function Player() {
       zoomFactor: 1.2,
     };
 
-    addZoomBlock(newZoomBlock);
-    selectZoomBlock(newZoomBlock);
+    if (currentTime) {
+      addZoomBlock(newZoomBlock);
+      selectZoomBlock(newZoomBlock);
+    }
   };
 
   return (

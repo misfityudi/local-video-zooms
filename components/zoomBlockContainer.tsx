@@ -19,7 +19,8 @@ export default function ZoomBlockContainer() {
   if (!zoomBlocks.length) {
     return (
       <p className="text-center">
-        Note: There are no Zoom Blocks, drag over the video to generate one!
+        Note: There are no Zoom Blocks, play and click on the video to generate
+        one!
       </p>
     );
   }

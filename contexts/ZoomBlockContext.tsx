@@ -86,7 +86,7 @@ export const ZoomBlockProvider = ({
 export const useZoomBlock = () => {
   const context = useContext(ZoomBlockContext);
   if (!context) {
-    throw new Error("useTheme must be used within a ZoomBlockProvider");
+    throw new Error("useZoomBlock must be used within a ZoomBlockProvider");
   }
   return context;
 };
