@@ -4,11 +4,11 @@ import { createContext, useContext, useState } from "react";
 
 type StartTime = number;
 type EndTime = number;
-type PositionX = number;
-type PositionY = number;
+type XPosition = number;
+type YPosition = number;
 type Coordinates = {
-  x: PositionX;
-  y: PositionY;
+  x: XPosition;
+  y: YPosition;
 };
 type ZoomFactor = number;
 
@@ -28,6 +28,7 @@ interface ZoomBlockContextProps {
   addZoomBlock: (zoomBlock: ZoomBlock) => void;
   removeZoomBlock: (zoomBlock: ZoomBlock) => void;
   selectZoomBlock: (zoomBlock: ZoomBlock) => void;
+  updateZoomBlock: (updatedZoomBlock: Partial<NonNullable<ZoomBlock>>) => void;
 }
 
 const ZoomBlockContext = createContext<ZoomBlockContextProps | undefined>(
@@ -54,6 +55,18 @@ export const ZoomBlockProvider = ({
     setSelectedZoomBlock(zoomBlock);
   };
 
+  const updateZoomBlock = (
+    updatedZoomBlock: Partial<NonNullable<ZoomBlock>>
+  ) => {
+    setSelectedZoomBlock((prev) => {
+      if (!prev) return;
+      return {
+        ...prev,
+        ...updatedZoomBlock,
+      };
+    });
+  };
+
   return (
     <ZoomBlockContext.Provider
       value={{
@@ -62,6 +75,7 @@ export const ZoomBlockProvider = ({
         addZoomBlock,
         removeZoomBlock,
         selectZoomBlock,
+        updateZoomBlock,
       }}
     >
       {children}

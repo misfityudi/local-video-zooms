@@ -44,7 +44,7 @@ export default function Player() {
         x: clickX,
         y: clickY,
       },
-      zoomFactor: 1,
+      zoomFactor: 1.2,
     };
 
     addZoomBlock(newZoomBlock);
@@ -55,7 +55,7 @@ export default function Player() {
     <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200">
       <video
         ref={videoRef}
-        className="border-t rounded-t-lg cursor-crosshair"
+        className="border-t rounded-t-lg cursor-zoom-in"
         onClick={handleBlockCreation}
       >
         Your browser does not support the video tag.
