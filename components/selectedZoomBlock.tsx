@@ -8,6 +8,8 @@ export default function SelectedZoomBlock() {
   const { duration } = useVideo();
   const { zoomBlocks, selectedZoomBlock, updateZoomBlock } = useZoomBlock();
 
+  console.log("selected", selectedZoomBlock);
+
   if (!selectedZoomBlock || !zoomBlocks.length) return;
 
   const handleChange = (field: keyof typeof selectedZoomBlock, value: any) => {
@@ -63,7 +65,7 @@ export default function SelectedZoomBlock() {
             onChange={(e) =>
               handleChange("coordinates", {
                 ...selectedZoomBlock.coordinates,
-                x: parseFloat(e.target.value),
+                x: parseFloat(e.target.value || "0.9"),
               })
             }
           />
@@ -79,7 +81,7 @@ export default function SelectedZoomBlock() {
             onChange={(e) =>
               handleChange("coordinates", {
                 ...selectedZoomBlock.coordinates,
-                y: parseFloat(e.target.value),
+                y: parseFloat(e.target.value || "0.9"),
               })
             }
           />
@@ -93,10 +95,11 @@ export default function SelectedZoomBlock() {
           id="zoom-factor"
           className="mt-1"
           min={1}
+          max={4}
           step="0.1"
           value={selectedZoomBlock.zoomFactor}
           onChange={(e) =>
-            handleChange("zoomFactor", parseFloat(e.target.value))
+            handleChange("zoomFactor", parseFloat(e.target.value || "0.9"))
           }
         />
       </label>

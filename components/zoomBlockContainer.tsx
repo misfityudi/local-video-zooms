@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  useZoomBlock,
-  ZoomBlock,
-  ZoomBlocks,
-} from "@/contexts/ZoomBlockContext";
+import { useZoomBlock, BlockId, ZoomBlock } from "@/contexts/ZoomBlockContext";
 import Image from "next/image";
 
 interface ZoomBlockCarouselProps {
-  zoomBlocks: ZoomBlocks;
-  removeZoomBlock: (zoomBlock: ZoomBlock) => void;
-  selectZoomBlock: (zoomBlock: ZoomBlock) => void;
+  zoomBlocks: ZoomBlock[];
+  removeZoomBlock: (removedBlockId: BlockId) => void;
+  selectZoomBlock: (blockToSelect: ZoomBlock) => void;
 }
 
 export default function ZoomBlockContainer() {
@@ -55,7 +51,7 @@ function ZoomBlockCarousel({
               height={24}
               width={24}
               className="cursor-pointer absolute top-0 right-0 z-10 rounded-full border-2 border-gray-200 bg-black p-1"
-              onClick={() => removeZoomBlock(item)}
+              onClick={() => removeZoomBlock(item.blockId)}
             />
           </div>
         </div>

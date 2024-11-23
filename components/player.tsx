@@ -18,7 +18,37 @@ export default function Player() {
     updateCurrentTime,
   } = useVideo();
 
-  const { addZoomBlock, selectZoomBlock } = useZoomBlock();
+  const { zoomBlocks, addZoomBlock } = useZoomBlock();
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const applyZoom = () => {
+      const currentTime = video.currentTime * 1000;
+
+      // Find the active zoom block
+      const activeZoomBlock = zoomBlocks.find(
+        (zoomBlock) =>
+          currentTime >= zoomBlock.startTime && currentTime <= zoomBlock.endTime
+      );
+
+      console.log("activeZoomBlock", activeZoomBlock);
+
+      if (activeZoomBlock) {
+        // Apply zoom based on the active zoom block
+        video.style.transform = `scale(${activeZoomBlock.zoomFactor}) translate(${activeZoomBlock.coordinates.x}px, ${activeZoomBlock.coordinates.y}px)`;
+      } else {
+        // Reset to default zoom if no active zoom block
+        video.style.transform = "scale(1) translate(0, 0)";
+      }
+    };
+
+    // Run applyZoom function on every video time update
+    const interval = setInterval(applyZoom, 100);
+
+    return () => clearInterval(interval);
+  }, [zoomBlocks]);
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const progressBar = e.currentTarget;
@@ -39,6 +69,7 @@ export default function Player() {
     const clickY = e.clientY - rect.top;
 
     const newZoomBlock: ZoomBlock = {
+      blockId: zoomBlocks.length,
       startTime: currentTime,
       endTime: currentTime + 1000,
       coordinates: {
@@ -48,9 +79,8 @@ export default function Player() {
       zoomFactor: 1.2,
     };
 
-    if (currentTime) {
+    if (currentTime && currentTime != duration) {
       addZoomBlock(newZoomBlock);
-      selectZoomBlock(newZoomBlock);
     }
   };
 
@@ -58,7 +88,7 @@ export default function Player() {
     <div className="w-3/5 flex flex-col self-center my-auto border rounded-lg border-gray-200">
       <video
         ref={videoRef}
-        className="border-t rounded-t-lg cursor-zoom-in"
+        className="player border-t rounded-t-lg cursor-zoom-in overflow-hidden"
         onClick={handleBlockCreation}
       >
         Your browser does not support the video tag.
