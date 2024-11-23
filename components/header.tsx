@@ -1,5 +1,4 @@
 import Image from "next/image";
-import CtaContainer from "./ctaContainer";
 import UploadButton from "./uploadButton";
 
 export default function Header() {

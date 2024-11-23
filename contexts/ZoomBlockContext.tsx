@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export type BlockId = number;
 type StartTime = number;
@@ -46,9 +46,6 @@ export const ZoomBlockProvider = ({
     useState<SelectedZoomBlock>();
   const [zoomBlocks, setZoomBlocks] = useState<ZoomBlock[]>([]);
 
-  const isSelectedBlockInitialized = useRef(false);
-
-  // Monitor `selectedZoomBlock` updates
   useEffect(() => {
     setZoomBlocks((prev) =>
       prev.map((block) =>
@@ -57,20 +54,16 @@ export const ZoomBlockProvider = ({
           : block
       )
     );
-    // Perform any logic when `selectedZoomBlock` updates
   }, [selectedZoomBlock]);
 
   useEffect(() => {
     setZoomBlocks((prev) => {
-      // Sort the blocks by startTime
       const sortedBlocks = [...prev].sort((a, b) => a.startTime - b.startTime);
 
-      // Update blockId to match the index
       sortedBlocks.forEach((block, index) => {
-        block.blockId = index; // Assuming blockId exists on the ZoomBlock type
+        block.blockId = index;
       });
 
-      // Set the last element as the selected block
       setSelectedZoomBlock(sortedBlocks[sortedBlocks.length - 1]);
 
       return sortedBlocks;

@@ -26,9 +26,8 @@ export default function Player() {
 
     const applyZoom = () => {
       const currentTime = video.currentTime * 1000;
-      const rect = video.getBoundingClientRect(); // Get the dimensions of the video player
+      const rect = video.getBoundingClientRect();
 
-      // Find the active zoom block
       const activeZoomBlock = zoomBlocks.find(
         (zoomBlock) =>
           currentTime >= zoomBlock.startTime && currentTime <= zoomBlock.endTime
@@ -38,46 +37,36 @@ export default function Player() {
         const { x, y } = activeZoomBlock.coordinates;
         const zoomFactor = activeZoomBlock.zoomFactor;
 
-        // Calculate the scaled size of the video
         const scaledWidth = rect.width * zoomFactor;
         const scaledHeight = rect.height * zoomFactor;
 
-        // Calculate the position of the coordinates relative to the center of the video player
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const offsetX = x - centerX; // X offset from the center
-        const offsetY = y - centerY; // Y offset from the center
+        const offsetX = x - centerX;
+        const offsetY = y - centerY;
 
-        // Directional panning logic
         let panX = 0;
         let panY = 0;
 
         if (offsetX < 0) {
-          // Left side, pan to the right
           panX = Math.min(0, -(scaledWidth - rect.width) / 2 - offsetX);
         } else {
-          // Right side, pan to the left
           panX = Math.max(0, (scaledWidth - rect.width) / 2 - offsetX);
         }
 
         if (offsetY < 0) {
-          // Top side, pan down
           panY = Math.min(0, -(scaledHeight - rect.height) / 2 - offsetY);
         } else {
-          // Bottom side, pan up
           panY = Math.max(0, (scaledHeight - rect.height) / 2 - offsetY);
         }
 
-        // Apply the zoom and pan, ensuring clipping of overflow
         video.style.transform = `scale(${zoomFactor}) translate(${panX}px, ${panY}px)`;
       } else {
-        // Reset to default zoom if no active zoom block
         video.style.transform = "scale(1) translate(0, 0)";
       }
     };
 
-    // Run applyZoom function on every video time update
     const interval = setInterval(applyZoom, 100);
 
     return () => clearInterval(interval);
