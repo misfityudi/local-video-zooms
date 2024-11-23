@@ -17,7 +17,7 @@ export default function Player() {
     updateCurrentTime,
   } = useVideo();
 
-  const { addZoomBlock } = useZoomBlock();
+  const { addZoomBlock, selectZoomBlock } = useZoomBlock();
 
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     const progressBar = e.currentTarget;
@@ -48,6 +48,7 @@ export default function Player() {
     };
 
     addZoomBlock(newZoomBlock);
+    selectZoomBlock(newZoomBlock);
   };
 
   return (
